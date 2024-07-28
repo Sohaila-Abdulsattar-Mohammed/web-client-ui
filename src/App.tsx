@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDaily } from "@daily-co/daily-react";
-import { ArrowRight, Ear, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 
 import Session from "./components/Session";
-import { Configure, RoomSetup } from "./components/Setup";
+import { RoomSetup } from "./components/Setup";
 import { Alert } from "./components/ui/alert";
 import { Button } from "./components/ui/button";
 import {
@@ -27,10 +27,10 @@ type State =
   | "error";
 
 const status_text = {
-  configuring: "Let's go!",
-  requesting_agent: "Requesting agent...",
+  configuring: "Start My Coffee Order!",
+  requesting_agent: "Loading...",
   requesting_token: "Requesting token...",
-  connecting: "Connecting to room...",
+  connecting: "Connecting you to Coffeebot...",
 };
 
 // Server URL (ensure trailing slash)
@@ -58,7 +58,7 @@ export default function App() {
     showConfigOptions ? "idle" : "configuring"
   );
   const [error, setError] = useState<string | null>(null);
-  const [startAudioOff, setStartAudioOff] = useState<boolean>(false);
+  const [startAudioOff] = useState<boolean>(false);
   const [roomUrl, setRoomUrl] = useState<string | null>(roomQs || null);
   const [roomError, setRoomError] = useState<boolean>(
     (roomQs && checkRoomUrl(roomQs)) || false
@@ -143,35 +143,28 @@ export default function App() {
 
   if (state !== "idle") {
     return (
-      <Card shadow className="animate-appear max-w-lg">
-        <CardHeader>
-          <CardTitle>Configure your devices</CardTitle>
-          <CardDescription>
-            Please configure your microphone and speakers below
-          </CardDescription>
-        </CardHeader>
-        <CardContent stack>
-          <div className="flex flex-row gap-2 bg-primary-50 px-4 py-2 md:p-2 text-sm items-center justify-center rounded-md font-medium text-pretty">
-            <Ear className="size-7 md:size-5 text-primary-400" />
-            Works best in a quiet environment with a good internet.
-          </div>
-          <Configure
-            startAudioOff={startAudioOff}
-            handleStartAudioOff={() => setStartAudioOff(!startAudioOff)}
-          />
-        </CardContent>
-        <CardFooter>
-          <Button
-            key="start"
-            fullWidthMobile
-            onClick={() => start()}
-            disabled={state !== "configuring"}
-          >
-            {state !== "configuring" && <Loader2 className="animate-spin" />}
-            {status_text[state as keyof typeof status_text]}
-          </Button>
-        </CardFooter>
-      </Card>
+      // Card component styles (Assuming you have an associated CSS or TailwindCSS for styling)
+    <Card shadow className="animate-appear max-w-xl">
+      <CardHeader>
+        <CardTitle style={{ fontSize: '75px' }}>Welcome to RoboCafe!</CardTitle>
+        <CardDescription style={{ fontSize: '20px', paddingLeft: '50px', paddingRight: '50px'  }}>
+          Start chatting with our AI powered barista to place an order.
+        </CardDescription>
+      </CardHeader>
+      <CardFooter>
+        <Button
+          key="start"
+          fullWidthMobile
+          style={{ fontSize: '25px' }} // Increased font size for button text
+          onClick={() => start()}
+          disabled={state !== "configuring"}
+        >
+          {state !== "configuring" && <Loader2 className="animate-spin" />}
+          {status_text[state as keyof typeof status_text]}
+        </Button>
+      </CardFooter>
+    </Card>
+
     );
   }
 
